@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hust.smartpark.dao.CarInfoDao" >
+  <resultMap id="BaseResultMap" type="hust.smartpark.entity.CarInfo" >
+    <result column="room_num" property="roomNum" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="receipt_num" property="receiptNum" jdbcType="VARCHAR" />
+    <result column="car_num" property="carNum" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    room_num, tel, remark, receipt_num, car_num
+  </sql>
+  <select id="selectAllCars" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car_info
+  </select>
+  <select id="selectKeyCarCount" resultType="java.lang.Integer">
+    select count(*)
+    from car_info where remark='1'
+  </select>
+  <select id="selectAllCarCount" resultType="java.lang.Integer">
+    select count(*)
+    from car_info
+  </select>
+ <select id="selectKeyCars" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car_info where remark='1'
+  </select>
+  <update id="addKeycar">
+      update car_info set remark = '1' WHERE car_num=#{0}
+  </update>
+  <update id="delKeycar">
+      update car_info set remark = '0' WHERE car_num=#{0}
+  </update>
+  
+   <select id="selectCarPerProvince" resultType="hust.smartpark.entity.CommonMap" >
+    SELECT left(car_num,1) AS value1,count(*) as value2 FROM car_info GROUP BY value1 ;
+  </select>
+  
+    <select id="selectCarPerBlock" resultType="hust.smartpark.entity.CommonMap" >
+    SELECT left(room_num,1) AS value1,count(*) as value2 FROM car_info GROUP BY value1 ;
+  </select>
+  <select id="selectBlockCars" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from car_info where room_num like #{0}
+  </select>
+  <select id="selectRemark" resultType="java.lang.String" parameterType="java.lang.String">
+    select remark
+    from car_info where car_num = #{0} LIMIT 1
+  </select>
+  <select id="selectDayCars" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select a.room_num, a.tel, a.remark, a.car_num
+    from car_info as a,park_info as b 
+    where a.car_num=b.car_num and 
+    b.time <![CDATA[ >= ]]> #{0} and b.time <![CDATA[ <= ]]> #{1}
+  </select>
+  <select id="selectAllCarNum" resultType="java.lang.String">
+    select car_num
+    from car_info 
+  </select>
+  <select id="selectProvenceCars" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from car_info 
+    where car_num like #{0}
+  </select>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+        insert into car_info (room_num, tel, remark, receipt_num, car_num)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roomNum}, #{item.tel},#{item.remark},#{item.receiptNum},#{item.carNum})
+        </foreach>
+   </insert>
+   
+  <insert id="insert" parameterType="hust.smartpark.entity.CarInfo">
+        insert into car_info (room_num, tel, remark, receipt_num, car_num)
+        values (#{roomNum}, #{tel},#{remark},#{receiptNum},#{carNum})       
+  </insert>
+  <update id="update" parameterType="hust.smartpark.entity.CarInfo">
+      update car_info set room_num=#{roomNum}, tel= #{tel}, remark=#{remark}, 
+      receipt_num=#{receiptNum}
+      WHERE car_num=#{carNum}
+  </update>
+  
+</mapper>

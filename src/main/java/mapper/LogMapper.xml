@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hust.smartpark.dao.LogDao" >
+  
+  
+  <insert id="insert" parameterType="hust.smartpark.entity.Log">
+        insert into log (log_id, type, title, remote_addr, request_uri,method,params,exception,operate_date,timeout,user_id)
+        values (#{logId}, #{type},#{title},#{remoteAddr},#{requestUri},#{method},
+         #{params},#{exception},#{operateDate},#{timeout},#{userId})       
+   </insert>
+   <update id="update" parameterType="hust.smartpark.entity.Log">
+      update log set type=#{type}, title=#{title}, remote_addr=#{remoteAddr}, 
+      request_uri=#{requestUri},method=#{method},params=#{params},exception=#{exception},
+      operate_date=#{operateDate},timeout=#{timeout},user_id=#{userId}
+      WHERE log_id=#{logId}
+  </update>
+</mapper>

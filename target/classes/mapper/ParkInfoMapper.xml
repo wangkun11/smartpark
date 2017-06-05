@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hust.smartpark.dao.ParkInfoDao" >
+    
+   <!-- 每辆车的停车频次 -->
+   <select id="selectCountBycar" resultType="hust.smartpark.entity.CommonMap" parameterType="java.lang.String" >
+    SELECT car_num value1,count(*) value2 from 
+    (SELECT * from park_info 
+    WHERE time <![CDATA[ >= ]]> #{0} and time <![CDATA[ <= ]]> #{1}) as b 
+    GROUP BY value1;
+  </select>
+  
+  <!-- 每天的停车频次 -->
+  <select id="selectCountByDay" resultType="hust.smartpark.entity.CountByDays" parameterType="java.lang.String" >
+    SELECT str_to_date(DATE_FORMAT(time,'%Y%m%d'),'%Y%m%d') day,count(*) value from 
+    (SELECT * from park_info WHERE time<![CDATA[ >= ]]> #{0} and time <![CDATA[ <= ]]> #{1}) as b  
+    GROUP BY day ORDER BY day;
+  </select>
+  
+   <!-- 时间段的所有停车记录 -->
+  <select id="selectParkInfoByTime" resultType="hust.smartpark.dto.DtoPark" parameterType="java.lang.String" >
+    SELECT car_num carNum,time time,type type,park_name parkName
+    FROM park_info  
+    WHERE time <![CDATA[ >= ]]> #{0} and time <![CDATA[ <= ]]> #{1}
+  </select>
+  
+  <!-- 一辆车的所有停车记录 -->
+  <select id="selectParkTimeByCar" resultType="hust.smartpark.dto.DtoPark" parameterType="java.lang.String" >
+    SELECT time time,type type from park_info
+    where car_num=#{0};
+  </select>
+  
+  <!-- 插入一条停车记录 -->
+  <insert id="insert" parameterType="hust.smartpark.dto.DtoPark">		
+		insert into park_info (car_num, time,type, park_name)
+		values (#{carNum,jdbcType=VARCHAR},#{time,jdbcType=TIMESTAMP},#{type,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR})
+  </insert>
+  
+  <!-- 今天所有停车记录 -->
+  <select id="selectToDay" resultType="hust.smartpark.dto.DtoPark"
+		parameterType="java.lang.String">
+		SELECT car_num carNum,time time,type type,park_name parkName
+		from park_info
+		WHERE time<![CDATA[ >= ]]>#{0} and time <![CDATA[ <= ]]>#{1}
+  </select>
+  <!-- 今天所有重点车辆停车记录（in语句） -->
+  <select id="selectToDayKeyCars" resultType="hust.smartpark.dto.DtoPark">
+		SELECT car_num carNum,time time,type type,park_name parkName
+		from park_info
+		WHERE time<![CDATA[ >= ]]> #{0} and time <![CDATA[ <= ]]> #{1}
+		and car_num in 
+		<foreach collection="param3" item="carNums" index="index"
+            open="(" close=")" separator=",">
+            #{carNums}
+        </foreach>
+  </select>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+        insert into park_info (car_num,time,type,park_name)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.carNum}, #{item.time},#{item.type},#{item.parkName})
+        </foreach>
+   </insert>
+   <select id="selectAllCount" resultType="java.lang.Integer">
+    select count(*)
+    from park_info
+  </select>
+</mapper>

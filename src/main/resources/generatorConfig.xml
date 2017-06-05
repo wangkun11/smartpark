@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.35\mysql-connector-java-5.1.35.jar" />
+	<context id="context1">
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/smart_park" userId="root"
+			password="123456" />
+		<javaModelGenerator targetPackage="hust.smartpark.entity"
+			targetProject="smartpark" />
+		<sqlMapGenerator targetPackage="mapper" targetProject="smartpark" />
+		<javaClientGenerator targetPackage="hust.smartpark.dao"
+			targetProject="smartpark" type="XMLMAPPER" />
+
+
+		<table tableName="car_info" domainObjectName="CarInfo"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"></table>
+		<table tableName="park_info" domainObjectName="ParkInfo"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false"></table>
+		
+		
+
+
+	</context>
+
+</generatorConfiguration>
