@@ -239,7 +239,7 @@ public class MainController {
 
 	// 6、实时
 	// 6.1 今天所有停车记录
-	@SystemControllerLog(description="查询今天的所有停车记录")
+	//@SystemControllerLog(description="查询今天的所有停车记录")
 	@ResponseBody
 	@RequestMapping(value = "/currentcar")
 	public List<DtoPark> currentcar() {
@@ -265,7 +265,7 @@ public class MainController {
 		return list;
 	}
 	//6.2 查询今天的所有重点停车记录
-	@SystemControllerLog(description="查询今天的所有重点停车记录")
+	//@SystemControllerLog(description="查询今天的所有重点停车记录")
 	@ResponseBody
 	@RequestMapping(value = "/currentkeycar")
 	public List<DtoPark> currentkeycar() {

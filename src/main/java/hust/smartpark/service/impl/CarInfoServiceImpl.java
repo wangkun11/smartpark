@@ -101,7 +101,17 @@ public class CarInfoServiceImpl implements CarInfoService {
 		for (CarInfo carInfo : carlist) {
 			//过滤车牌号异常
 			if (carInfo.getCarNum()==null) continue;
-			if ("临时".equals(carInfo.getCarNum())||carInfo.getCarNum().length()==7) {
+			if (carInfo.getCarNum().length()==7) {
+				String tel =carInfo.getTel();
+				String roomNum=carInfo.getRoomNum();
+				if (tel!=null&&tel.length()>=11) {
+					String tel1=tel.substring(0, 3)+"****"+tel.substring(7);
+					carInfo.setTel(tel1);
+				}
+				if (roomNum!=null&&roomNum.length()>=4) {
+					String roomNum1=roomNum.substring(0,3)+"-***";
+					carInfo.setRoomNum(roomNum1);
+				}
 				//先尝试插入，若发生异常，则证明主键冲突，采用更新
 				try {
 					carInfoDao.insert(carInfo);
