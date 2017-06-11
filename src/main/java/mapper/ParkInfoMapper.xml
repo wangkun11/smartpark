@@ -22,6 +22,9 @@
     SELECT car_num carNum,time time,type type,park_name parkName
     FROM park_info  
     WHERE time <![CDATA[ >= ]]> #{0} and time <![CDATA[ <= ]]> #{1}
+    and date_format(time,'%H:%i:%s') <![CDATA[ >= ]]> #{2} 
+    and date_format(time,'%H:%i:%s') <![CDATA[ <= ]]> #{3}
+    ORDER BY time
   </select>
   
   <!-- 一辆车的所有停车记录 -->
@@ -41,7 +44,7 @@
 		parameterType="java.lang.String">
 		SELECT car_num carNum,time time,type type,park_name parkName
 		from park_info
-		WHERE time<![CDATA[ >= ]]>#{0} and time <![CDATA[ <= ]]>#{1}
+		WHERE time<![CDATA[ >= ]]>#{0} and time <![CDATA[ <= ]]>#{1} order by time desc
   </select>
   <!-- 今天所有重点车辆停车记录（in语句） -->
   <select id="selectToDayKeyCars" resultType="hust.smartpark.dto.DtoPark">
@@ -52,7 +55,7 @@
 		<foreach collection="param3" item="carNums" index="index"
             open="(" close=")" separator=",">
             #{carNums}
-        </foreach>
+        </foreach> order by time desc
   </select>
   
   <insert id="insertBatch" parameterType="java.util.List">

@@ -18,7 +18,7 @@ public interface ParkInfoDao {
 			String parkName);
 
 	//  <!-- 时间段的所有停车记录 -->
-	List<DtoPark> selectParkInfoByTime(String timeStart, String timeEnd,
+	List<DtoPark> selectParkInfoByTime(String dateStart, String dateEnd,String timeStart,String timeEnd,
 			String parkName);
 
 	// <!-- 一辆车的所有停车记录 -->

@@ -32,9 +32,11 @@ public class ParkInfoServiceImpl implements ParkInfoService{
 	public List<DtoPark> selectByTime(String startDay, String endDay,
 			String timeSlot, String parkName) {
 		//ymd=2017-03-20 time=12:00-14:00
-		String timeStart=startDay+" "+timeSlot.split("-")[0]+":00";
-		String timeEnd=endDay+" "+timeSlot.split("-")[1]+":00";
-		List<DtoPark> list=parkInfoDao.selectParkInfoByTime(timeStart,timeEnd,parkName);
+		String dateStart=startDay+" 00:00:00";
+		String dateEnd=endDay+" 24:00:00";
+		String timeStart=timeSlot.split("-")[0]+":00";
+		String timeEnd=timeSlot.split("-")[1]+":00";
+		List<DtoPark> list=parkInfoDao.selectParkInfoByTime(dateStart,dateEnd,timeStart,timeEnd,parkName);
 		/*//时间格式化
 		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
 		for (DtoPark dtoPark : list) {
@@ -151,11 +153,13 @@ public class ParkInfoServiceImpl implements ParkInfoService{
 		return parkInfoDao.insert(record);
 	}
 	public int insertBatch(List<DtoPark> dtoParks) {
-		return parkInfoDao.insertBatch(dtoParks);
+		try {
+			return parkInfoDao.insertBatch(dtoParks);
+		} catch (Exception e) {
+			return 0;
+		}
+		
 	}
-	/* (non-Javadoc)
-	 * @see hust.smartpark.service.ParkInfoService#selectAllCount()
-	 */
 	public String selectAllCount() {
 		// TODO Auto-generated method stub
 		return parkInfoDao.selectAllCount()+"";

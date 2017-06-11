@@ -1989,7 +1989,7 @@ $(function(){
         }else if(this.name == "realtime" && isClicked == "false" ){
             //render realtime
             render_realtime();
-            setInterval("render_realtime()",3*1000);
+            setInterval("render_realtime()",15*1000);
 
         }else if(this.name == "tscl" && isClicked == "false" ){
             //render tscl
